@@ -14,3 +14,7 @@ module TFA
     "#{@@version[:major]}.#{@@version[:minor]}.#{@@version[:patch]}#{"." if @@version[:extra].length > 0}#{@@version[:extra].join(".")}"
   end
 end
+
+class Engine < Rails::Engine
+  config.autoload_paths << File.expand_path(__dir__)
+end

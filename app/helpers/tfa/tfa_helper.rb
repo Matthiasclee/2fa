@@ -1,6 +1,6 @@
 module TFA
   module TfaHelper
-    def require_2fa(
+    def require_tfa(
       url:,
       method: :post,
       http_params: {},
@@ -30,12 +30,12 @@ module TFA
     end
 
     def if_tfa(&block)
-      if params[:tfa_id] && Tfa.find_by(id: params[:tfa_id]).code.to_s == params[:code].to_s
+      if params[:tfa_id] && Tfa.find_by(id: params[:tfa_id]).code.to_s == params[:code].to_s && !Tfa.find_by(id: params[:tfa_id]).used
         @tfa = Tfa.find_by(id: params[:tfa_id])
         @tfa.used = true
         @tfa.save
 
-        block.call
+        block.call(@tfa)
       end
     end
 

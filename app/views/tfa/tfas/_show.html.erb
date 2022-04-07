@@ -1,0 +1,17 @@
+<h1>Please enter the code we sent to <%= @tfa_phone %></h1>
+
+<%= form_with(url: @url, method: @method) do |f|  %>
+  <%= f.hidden_field :tfa_id, value: @tfa.id %>
+  <% @http_params.each do |p| %>
+    <%= f.hidden_field p[0].to_sym, value: p[1].to_s.gsub("\0001", ':').gsub("\0002", ',').gsub("\0003", '#') %>
+  <% end %>
+
+  <div class='field'>
+    <%= f.number_field :code %>
+  </div>
+
+  <div class='actions'>
+    <%= f.submit 'Go' %>
+  </div>
+<% end %>
+

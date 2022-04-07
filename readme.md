@@ -33,7 +33,7 @@ def create
   end
 
   helpers.if_tfa do
-    @example = example.new(example_params)
+    @example = Example.new(example_params)
 
     respond_to do |format|
       if @example.save

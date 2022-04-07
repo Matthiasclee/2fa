@@ -1,3 +1,3 @@
 TFA::Engine.routes.draw do
-  get 'asd', to: 'ffff#asd'
+  get '/:id/verify', to: 'tfas#show', as: :tfa_verify
 end

@@ -49,14 +49,10 @@ end
 ```
 This is just a default scaffolded controller but with tfa auth.
 
-This isn't perfect as in theory someone could pass a different unused tfa by inspecting the form, so to prevent this, you can take in a `|tfa|` argument from the helper to verify that the tfa has the correct phone number.
+This isn't perfect as in theory someone could pass a different unused tfa by inspecting the form, so to prevent this, you can pass a `expected_phone: ` argument to `no_tfa` or `if_tfa` to add that requirement.
 ```rb
-helpers.if_tfa do |tfa|
-  if tfa.phone == @user.phone
-    #...your code here
-  else
-    head 401
-  end 
+helpers.if_tfa(expected_phone: @user.phone) do
+  #...
 end
 ```
 

@@ -29,8 +29,12 @@ module TFA
       controller.redirect_to Engine.routes.url_helpers.tfa_verify_path(@tfa)
     end
 
-    def if_tfa(&block)
-      if params[:tfa_id] && Tfa.find_by(id: params[:tfa_id]).code.to_s == params[:code].to_s && !Tfa.find_by(id: params[:tfa_id]).used
+    def tfa_valid(expected_phone:nil)
+      params[:tfa_id] && Tfa.find_by(id: params[:tfa_id]).code.to_s == params[:code].to_s && !Tfa.find_by(id: params[:tfa_id]).used && (Tfa.find_by(id: params[:tfa_id]).phone == expected_phone || expected_phone == nil)
+    end
+
+    def if_tfa(expected_phone:nil, &block)
+      if tfa_valid(expected_phone: expected_phone)
         @tfa = Tfa.find_by(id: params[:tfa_id])
         @tfa.used = true
         @tfa.save
@@ -39,10 +43,8 @@ module TFA
       end
     end
 
-    def no_tfa(&block)
-      if !params[:tfa_id]
-        block.call
-      elsif Tfa.find_by(id: params[:tfa_id]).code.to_s != params[:code].to_s
+    def no_tfa(expected_phone:nil, &block)
+      if !tfa_valid(expected_phone: expected_phone)
         block.call
       end
     end
